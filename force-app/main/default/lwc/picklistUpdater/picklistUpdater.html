@@ -1,0 +1,69 @@
+<template>
+    <lightning-card title="Picklist Manager">
+        <lightning-layout>
+            <lightning-layout-item size="6" padding="around-small">
+                <lightning-card title="Add A New Picklist Value">
+                        <lightning-combobox name="action"
+                                            label="Action"
+                                            value={value}
+                                            placeholder="Select Action"
+                                            options={options}
+                                            onchange={updaterActionName}></lightning-combobox>
+                        <lightning-input name="Object Name" type="text" label="Object Name" onchange={updaterObjectName} ></lightning-input>
+                                            <div>
+                                                <div class="slds-form-element">
+                                                    
+                                                    <div class="slds-form-element__control">
+                                                        <div class="slds-combobox_container">
+                                                            
+                                                            <div class={txtclassname} data-id="resultBox" aria-expanded="false" aria-haspopup="listbox" role="combobox">
+                                                                <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon slds-input-has-icon_left-right" role="none">
+                                                                    
+                                                                    <lightning-input required={required} read-only={inputReadOnly} data-id="userinput" label='Primary Field Name' name="searchText" onchange={searchPrimaryField} value={selectRecordName} class="leftspace"></lightning-input>
+                                                                </div>
+                                                            
+                                                                <!-- Second part display result -->
+                                                                <div id="listbox-id-1" class="slds-dropdown slds-dropdown_length-with-icon-7 slds-dropdown_fluid" role="listbox">
+                                                                    <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                                                        <template for:each={PrimarysearchRecords} for:item="serecord">
+                                                                            <li role="presentation" class="slds-listbox__item" key={serecord.recId}>
+                                                                                
+                                                                                <div data-id={serecord.recId} data-name={serecord.recName} onclick={setPrimaryFieldRecord} class="slds-media slds-listbox__option slds-listbox__option_entity slds-listbox__option_has-meta" role="option">
+                                                                                    <span class="slds-media__figure">
+                                                                                        <span class="slds-icon_container slds-icon-standard-account">
+                                                                                            <lightning-icon icon-name={iconName} class="slds-icon slds-icon slds-icon_small slds-icon-text-default" size="x-small"></lightning-icon>
+                                                                                        </span>
+                                                                                    </span>
+                                                                                    <span class="slds-media__body">
+                                                                                        <span class="slds-listbox__option-text slds-listbox__option-text_entity">{serecord.recName}</span>
+                                                                                        <span class="slds-listbox__option-meta slds-listbox__option-meta_entity">{objectName} • {serecord.recName}</span>
+                                                                                    </span>
+                                                                                </div>
+                                                                            </li>
+                                                                        </template>
+                                                                    </ul>
+                                                                </div> 
+                                                                <div if:true={messageFlag}>
+                                                                    No result found.
+                                                                </div>
+                                                                <div if:true={LoadingText}>
+                                                                    Loading...
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                    <lightning-input name="Primary Value" type="text" label="Primary Value" onchange={updaterPrimaryValue} ></lightning-input>
+                    <lightning-input name="Secondary Value" type="text" label="Secondary Value" onchange={updaterSecondaryValue} ></lightning-input>
+                    <lightning-input name="outputData" type="text" label="outputData" onchange={outputData} ></lightning-input>
+
+                    <lightning-button label="Create Picklist" onclick={createPicklist} variant="brand" ></lightning-button>
+                </lightning-card>
+            </lightning-layout-item>
+            <lightning-layout-item size="6" padding="around-small">
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+
+</template>
