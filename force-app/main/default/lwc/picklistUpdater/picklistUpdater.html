@@ -23,8 +23,15 @@
                 </template>
 
                     <lightning-input name="Primary Value" type="text" label="Primary Value" onchange={updaterPrimaryValue} ></lightning-input>
+
+                    <template if:true={objectNameGetter}>
+                        <c-reusable-lookup label="Secondary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
+                            object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
+                            onvalueselected={handleSecondaryFieldName}>
+                        </c-reusable-lookup>
+                    </template>
+
                     <lightning-input name="Secondary Value" type="text" label="Secondary Value" onchange={updaterSecondaryValue} ></lightning-input>
-                    <lightning-input name="outputData" type="text" label="outputData" onchange={outputData} ></lightning-input>
 
                     <lightning-button label="Create Picklist" onclick={createPicklist} variant="brand" ></lightning-button>
                 </lightning-card>

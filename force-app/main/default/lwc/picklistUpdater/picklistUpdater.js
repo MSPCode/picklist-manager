@@ -10,9 +10,9 @@ export default class picklistUpdater extends LightningElement {
     @track selectedValue;
     @track actionName;
     @track objectName;
-    @track primaryFieldName
+    @track primaryFieldName;
     @track primaryValue;
-    @track secondaryField
+    @track secondaryFieldName
     @track secondaryValue;
     @track recordId;
     @track objectNameGetter;
@@ -59,6 +59,11 @@ export default class picklistUpdater extends LightningElement {
         console.log(this.primaryFieldName);
     }
 
+    handleSecondaryFieldName(event){
+        this.secondaryFieldName = event.detail.mainField;
+        console.log(this.secondaryFieldName);
+    }
+
     updaterPrimaryValue(event){
         this.primaryValue = event.target.value;
     }
@@ -87,7 +92,10 @@ export default class picklistUpdater extends LightningElement {
             return updatePicklist({
                 objectName: this.objectName,
                 primaryFieldName: this.primaryFieldName,
-                valuesToUpdate: this.primaryValue // Convert primaryValue to a list
+                secondaryFieldName: this.secondaryFieldName,
+                primaryFieldValues: this.primaryValue, // Convert primaryValue to a list
+                secondaryFieldValue: this.secondaryValue // Convert SecondaryValue to a list
+
             });
             
         })

@@ -54,6 +54,33 @@ public class PicklistFieldUpdater {
         // Perform the update operation
         return performUpdateOperation(existingField);
     }
+
+    public MetadataService.SaveResult[] updateDependency(String fieldName, String controllingField, String controllingFieldValue, List<String> values){
+
+        List<MetadataService.ValueSettings> allValueSettings = new List<MetadataService.ValueSettings>();
+        
+        // Retrieve the existing field
+        MetadataService.CustomField existingField = retrieveExistingField(fieldName);
+
+        if (existingField.valueSet.valueSettings != null) {
+            allValueSettings.addAll(existingField.valueSet.valueSettings);
+        }
+
+        for (String valueName : values) {
+            MetadataService.ValueSettings vs = new MetadataService.ValueSettings();
+            vs.controllingFieldValue = new List<String>{controllingFieldValue};
+            vs.valueName = valueName;
+            allValueSettings.add(vs);
+        }
+        if (existingField.valueSet == null) {
+            existingField.valueSet = new MetadataService.ValueSet();
+        }
+        existingField.valueSet.controllingField = controllingField;
+        existingField.valueSet.valueSettings = allValueSettings;
+
+        return performUpdateOperation(existingField);
+
+    }
     
     private MetadataService.CustomField retrieveExistingField(String fieldName) {
     // Construct the full name of the picklist field using the global variables
