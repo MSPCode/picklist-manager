@@ -10,6 +10,19 @@
                                             options={options}
                                             onchange={updaterActionName}></lightning-combobox>
                         <lightning-input name="Object Name" type="text" label="Object Name" onchange={updaterObjectName} ></lightning-input>
+
+                        <c-reusable-lookup label="Parent Account" selected-icon-name="standard:account" object-label="Account"
+                        object-api-name="Account" field-api-name="Name" other-field-api-name="Industry"
+                        onvalueselected={handleValueSelectedOnAccount}>
+                        </c-reusable-lookup>
+
+
+                        <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="FieldDefinition"
+                        object-api-name="FieldDefinition" field-api-name="EntityDefinition.QualifiedApiName" other-field-api-name="QualifiedApiName"
+                        onvalueselected={handleValueSelectedFieldDefination}>
+
+
+                        </c-reusable-lookup>
                                             <div>
                                                 <div class="slds-form-element">
                                                     

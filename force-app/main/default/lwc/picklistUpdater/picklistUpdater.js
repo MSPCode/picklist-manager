@@ -31,6 +31,14 @@ export default class picklistUpdater extends LightningElement {
     @track iconFlag =  true;
     @track clearIconFlag = false;
     @track inputReadOnly = false;
+    parentAccountSelectedRecord;
+
+    handleValueSelectedOnAccount(event) {
+        this.parentAccountSelectedRecord = event.detail;
+    }
+    handleValueSelectedFieldDefination(event) {
+        this.parentAccountSelectedRecord = event.detail;
+    }
 
     get options() {
         return [
