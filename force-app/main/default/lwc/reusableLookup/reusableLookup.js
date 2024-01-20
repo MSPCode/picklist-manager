@@ -12,13 +12,14 @@ export default class ReusableLookup extends LightningElement {
     recordsList = [];
     selectedRecordName;
 
-    @api objectApiName = "Account";
-    @api fieldApiName = "Name";
-    @api otherFieldApiName = "Industry";
+    @api objectApiName = "";
+    @api fieldApiName = "";
+    @api otherFieldApiName = "";
     @api searchString = "";
     @api selectedRecordId = "";
     @api parentRecordId;
     @api parentFieldApiName;
+    @api additionalWhereClause
 
     preventClosingOfSerachPanel = false;
 
@@ -30,7 +31,8 @@ export default class ReusableLookup extends LightningElement {
             searchString: this.searchString,
             selectedRecordId: this.selectedRecordId,
             parentRecordId: this.parentRecordId,
-            parentFieldApiName: this.parentFieldApiName
+            parentFieldApiName: this.parentFieldApiName,
+            additionalWhereClause: this.additionalWhereClause
         };
     }
 

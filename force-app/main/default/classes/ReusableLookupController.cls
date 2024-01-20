@@ -2,6 +2,7 @@ public with sharing class ReusableLookupController {
     @AuraEnabled
     public static List<ResultWrapper> fetchRecords(SearchWrapper inputWrapper) {
         try {
+            System.debug(inputWrapper.additionalWhereClause);
             if(inputWrapper != null){
                 String fieldsToQuery = 'SELECT Id, ';
                 if(string.isNotBlank(inputWrapper.fieldApiName)){
@@ -17,12 +18,19 @@ public with sharing class ReusableLookupController {
                 }else if(String.isNotBlank(inputWrapper.parentFieldApiName) && String.isNotBlank(inputWrapper.parentRecordId)){
                     query += ' WHERE '+ inputWrapper.parentFieldApiName+ ' = \''+ inputWrapper.parentRecordId + '\'';
                     query += ' AND ' + filterCriteria;
-                } 
+                }
                 else {
                     query += ' WHERE '+ filterCriteria;
                 }
+                
+                if(String.isNotBlank(inputWrapper.additionalWhereClause)){
+                    filterCriteria += inputWrapper.additionalWhereClause;
+                } 
+                System.debug(query);
                 List<ResultWrapper> returnWrapperList = new List<ResultWrapper>();
+                
                 for(SObject s : Database.query(query)) {
+                    
                     ResultWrapper wrap = new ResultWrapper();
                     wrap.mainField = (String)s.get(inputWrapper.fieldApiName);
                     wrap.subField = (String)s.get(inputWrapper.otherFieldApiName);
@@ -51,5 +59,7 @@ public with sharing class ReusableLookupController {
         @AuraEnabled public String selectedRecordId{get;set;}
         @AuraEnabled public String parentRecordId{get;set;}
         @AuraEnabled public String parentFieldApiName{get;set;}
+        @AuraEnabled public String additionalWhereClause{get; set;}
+
     }
 }
