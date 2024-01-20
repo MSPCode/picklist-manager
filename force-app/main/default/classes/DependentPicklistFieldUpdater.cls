@@ -10,7 +10,7 @@ public class DependentPicklistFieldUpdater {
         //unnecessary code but needed for session token referesh
         Http h = new Http();
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('http://www.apexdevnet.com');
+        req.setEndpoint('callout:ApexMDAPI/services/data/v22.0/query/?q=SELECT+id+from+contact+LIMIT+1');
         req.setMethod('GET');
         HttpResponse res = h.send(req);
 
@@ -73,7 +73,35 @@ public class DependentPicklistFieldUpdater {
         existingField.valueSet.valueSettings = allValueSettings;
     }
 
-    public void applyChanges() {
-        service.updateMetadata(new MetadataService.Metadata[] { existingField });
-    }
+    public MetadataService.SaveResult[] performUpdateOperation(MetadataService.CustomField field) {
+
+        // Check if the custom field is not null
+        if (field == null) {
+            throw new IllegalArgumentException('Field must not be null');
+        }
+        try {
+        results = service.updateMetadata(new MetadataService.Metadata[] { existingField });
+
+         // Check for and handle any errors in the response
+        for (MetadataService.SaveResult result : results) {
+            if (!result.success) {
+                String errorMessage = 'Error updating field: ';
+                if (result.errors != null) {
+                    for (MetadataService.Error error : result.errors) {
+                        errorMessage += error.message + '; ';
+                    }
+                }
+                throw new IllegalArgumentException(errorMessage);
+            }
+        }
+
+        // Optionally, log the success
+        System.debug('Field update successful.');
+        } catch (Exception e) {
+            // Handle any exceptions during the update operation
+            System.debug('Exception in updating field: ' + e.getMessage());
+            // Re-throw the exception if you want it to be handled by the caller
+            throw e;
+        }
+    return results;}
 }

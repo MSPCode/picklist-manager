@@ -1,7 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 import { createRecord } from "lightning/uiRecordApi";
 import updatePicklist from '@salesforce/apex/mainPicklistHandler.updatePicklist';
-import getResults from '@salesforce/apex/lwcCustomLookupController.getResults';
 import { updateRecord } from 'lightning/uiRecordApi';
 import ID_FIELD from '@salesforce/schema/Picklist_Updater__c.Id'
 import STATUS_FIELD from '@salesforce/schema/Picklist_Updater__c.Status__c'
@@ -11,13 +10,13 @@ export default class picklistUpdater extends LightningElement {
     @track selectedValue;
     @track actionName;
     @track objectName;
-    @track primaryField
+    @track primaryFieldName
     @track primaryValue;
     @track secondaryField
     @track secondaryValue;
     @track recordId;
     @track objectNameGetter;
-    primaryFieldName;
+    ;
     @track getObjectName = false;
 
 
@@ -48,11 +47,16 @@ export default class picklistUpdater extends LightningElement {
         this.actionName = event.target.value;
     }
 
-    updaterObjectName(event){
+    handleObjectName(event){
         this.objectName = event.detail.mainField;
         this.objectNameGetter = event.detail.mainField;
         console.log(this.objectName);
         
+    }
+
+    handlePrimaryFieldName(event){
+        this.primaryFieldName = event.detail.mainField;
+        console.log(this.primaryFieldName);
     }
 
     updaterPrimaryValue(event){
@@ -61,11 +65,6 @@ export default class picklistUpdater extends LightningElement {
 
     updaterSecondaryValue(event){
         this.secondaryValue = event.target.value;
-    }
-
-    handlePrimaryFieldName(event){
-        this.primaryFieldName = event.detail;
-        console.log(this.primaryFieldName.mainField);
     }
 
     handleApexResponse(apexResponse) {
@@ -87,7 +86,7 @@ export default class picklistUpdater extends LightningElement {
 
             return updatePicklist({
                 objectName: this.objectName,
-                picklistFieldName: this.primaryField,
+                primaryFieldName: this.primaryFieldName,
                 valuesToUpdate: this.primaryValue // Convert primaryValue to a list
             });
             

@@ -11,13 +11,13 @@
                                             onchange={updaterActionName}></lightning-combobox>
                     
                     <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="EntityDefinition"
-                        object-api-name="EntityDefinition" field-api-name="QualifiedApiName" other-field-api-name="Label" additional-where-clause = "AND IsCustomizable=true"
-                        onvalueselected={updaterObjectName}>
+                        object-api-name="EntityDefinition" field-api-name="QualifiedApiName" other-field-api-name="Label" additional-where-clause = "IsCustomizable=true"
+                        onvalueselected={handleObjectName}>
                     </c-reusable-lookup>
 
                 <template if:true={objectNameGetter}>
                     <c-reusable-lookup label="Primary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
-                        object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "AND DATATYPE='Picklist'"
+                        object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
                         onvalueselected={handlePrimaryFieldName}>
                     </c-reusable-lookup>
                 </template>

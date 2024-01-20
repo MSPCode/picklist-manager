@@ -1,23 +1,20 @@
 public class PicklistFieldUpdater {
 
     private String objectName;
-    private String picklistFieldName;
     private MetadataService.MetadataPort service;
 
     /**
      * Constructor to initialize the PicklistFieldUpdater.
      *
      * @param objectName        the API name of the Salesforce object
-     * @param picklistFieldName the API name of the picklist field
      */
-    public PicklistFieldUpdater(String objectName, String picklistFieldName) {
+    public PicklistFieldUpdater(String objectName) {
         this.objectName = objectName;
-        this.picklistFieldName = picklistFieldName;
 
         //unnecessary code but needed for session token referesh
         Http h = new Http();
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('http://www.apexdevnet.com');
+        req.setEndpoint('callout:ApexMDAPI/services/data/v22.0/query/?q=SELECT+id+from+contact+LIMIT+1');
         req.setMethod('GET');
         HttpResponse res = h.send(req);
 
@@ -32,9 +29,9 @@ public class PicklistFieldUpdater {
     /**
      * Method to update the picklist field with new values.
      */
-    public MetadataService.SaveResult[] updatePicklistField(List<String> newCustomValues) {
+    public MetadataService.SaveResult[] updatePicklistField(String fieldName, List<String> newCustomValues) {
         // Retrieve the existing field
-        MetadataService.CustomField existingField = retrieveExistingField();
+        MetadataService.CustomField existingField = retrieveExistingField(fieldName);
 
         // Add new custom values to the existing values
         List<MetadataService.CustomValue> allValues = new List<MetadataService.CustomValue>();
@@ -58,9 +55,9 @@ public class PicklistFieldUpdater {
         return performUpdateOperation(existingField);
     }
     
-    private MetadataService.CustomField retrieveExistingField() {
+    private MetadataService.CustomField retrieveExistingField(String fieldName) {
     // Construct the full name of the picklist field using the global variables
-    String fieldFullName = this.objectName + '.' + this.picklistFieldName;
+    String fieldFullName = this.objectName + '.' + fieldName;
 
     // Use the constructed full name to retrieve the existing field
     MetadataService.CustomField existingField = 
@@ -130,9 +127,9 @@ public class PicklistFieldUpdater {
      *
      * @param valuesToDeactivate the list of values to deactivate in the picklist
      */
-    public MetadataService.SaveResult[] deactivatePicklistValues(List<String> valuesToDeactivate) {
+    public MetadataService.SaveResult[] deactivatePicklistValues(String fieldName, List<String> valuesToDeactivate) {
         // Retrieve the existing field
-        MetadataService.CustomField existingField = retrieveExistingField();
+        MetadataService.CustomField existingField = retrieveExistingField(fieldName);
     
         // Check if the value set definition exists
         if (existingField.valueSet.valueSetDefinition != null) {

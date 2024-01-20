@@ -1,11 +1,11 @@
 public with sharing class mainPicklistHandler {
 
     @AuraEnabled(cacheable=false)
-    public static MetadataService.SaveResult[] updatePicklist(String objectName, String picklistFieldName, List<String> valuesToUpdate) {
+    public static MetadataService.SaveResult[] updatePicklist(String objectName, String primaryFieldName, List<String> valuesToUpdate) {
 
         try {
-            PicklistFieldUpdater primaryUpdater = new PicklistFieldUpdater(objectName, picklistFieldName);
-            return primaryUpdater.updatePicklistField(valuesToUpdate);
+            PicklistFieldUpdater updater = new PicklistFieldUpdater(objectName);
+            return updater.updatePicklistField(primaryFieldName , valuesToUpdate);
 
         }
         catch(System.NullPointerException e){
