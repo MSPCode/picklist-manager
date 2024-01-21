@@ -1,44 +1,63 @@
 <template>
     <lightning-card title="Picklist Manager">
-        <lightning-layout>
-            <lightning-layout-item size="6" padding="around-small">
-                <lightning-card title="Add A New Picklist Value">
-                        <lightning-combobox name="action"
-                                            label="Action"
-                                            value={value}
-                                            placeholder="Select Action"
-                                            options={options}
-                                            onchange={updaterActionName}></lightning-combobox>
-                    
-                    <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="EntityDefinition"
-                        object-api-name="EntityDefinition" field-api-name="QualifiedApiName" other-field-api-name="Label" additional-where-clause = "IsCustomizable=true"
-                        onvalueselected={handleObjectName}>
-                    </c-reusable-lookup>
+        <p class="slds-var-p-around_small">
+            <lightning-layout multiple-rows>
 
+                <!-- Action and Object Name on the same line -->
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-layout-item padding="around-small" size="6">
+                        <lightning-combobox id="actionMenu" label="Select Action" name="action" value={value} placeholder="Select Action" options={options} onchange={updaterActionName}></lightning-combobox>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="EntityDefinition"
+                            object-api-name="EntityDefinition" field-api-name="QualifiedApiName" other-field-api-name="Label" additional-where-clause = "IsCustomizable=true"
+                            onvalueselected={handleObjectName}>
+                        </c-reusable-lookup>
+                    </lightning-layout-item>
+                </lightning-layout-item>
+
+                <!-- Primary Field & Primary Value on the same line -->
                 <template if:true={objectNameGetter}>
-                    <c-reusable-lookup label="Primary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
-                        object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
-                        onvalueselected={handlePrimaryFieldName}>
-                    </c-reusable-lookup>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <lightning-layout>
+                            <lightning-layout-item padding="around-small" size="6">
+                                <c-reusable-lookup label="Primary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
+                                    object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
+                                    onvalueselected={handlePrimaryFieldName}>
+                                </c-reusable-lookup>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="6">
+                                <lightning-input name="Primary Value" type="text" label="Primary Value" onchange={updaterPrimaryValue} ></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
                 </template>
 
-                    <lightning-input name="Primary Value" type="text" label="Primary Value" onchange={updaterPrimaryValue} ></lightning-input>
 
-                    <template if:true={objectNameGetter}>
-                        <c-reusable-lookup label="Secondary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
-                            object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
-                            onvalueselected={handleSecondaryFieldName}>
-                        </c-reusable-lookup>
-                    </template>
+                <!-- Secondary Field & Secondary Value on the same line -->
+                <template if:true={objectNameGetter}>
+                    <lightning-layout-item padding="around-small" size="12">
+                        <lightning-layout>
+                            <lightning-layout-item padding="around-small" size="6">
+                                <c-reusable-lookup label="Secondary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
+                                    object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
+                                    onvalueselected={handleSecondaryFieldName}>
+                                </c-reusable-lookup>
+                            </lightning-layout-item>
+                            <lightning-layout-item padding="around-small" size="6">
+                                <lightning-input name="Secondary Value" type="text" label="Secondary Value" onchange={updaterSecondaryValue} ></lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </template>
 
-                    <lightning-input name="Secondary Value" type="text" label="Secondary Value" onchange={updaterSecondaryValue} ></lightning-input>
 
+                <!-- Button -->
+                <lightning-layout-item size="12" class="slds-var-p-top_small">
                     <lightning-button label="Create Picklist" onclick={createPicklist} variant="brand" ></lightning-button>
-                </lightning-card>
-            </lightning-layout-item>
-            <lightning-layout-item size="6" padding="around-small">
-            </lightning-layout-item>
-        </lightning-layout>
-    </lightning-card>
+                </lightning-layout-item>
 
+            </lightning-layout>
+        </p>                  
+    </lightning-card>
 </template>

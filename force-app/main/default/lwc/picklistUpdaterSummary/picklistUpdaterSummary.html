@@ -1,0 +1,37 @@
+<template>
+
+    <lightning-card icon-name="custom:custom85">
+        <template lwc:if={picklistUpdater.data}>
+            <span slot="title">{nameField}</span>
+            <lightning-button-icon
+                icon-name="utility:expand_alt"
+                slot="actions"
+                onclick={handleNavigateToRecord}
+            >
+                <label>Navigate to Record</label>
+            </lightning-button-icon>
+            <div class="slds-var-m-horizontal_medium">
+                <lightning-record-form
+                    object-api-name="Picklist_Updater__c"
+                    record-id={recordId}
+                    fields={picklistUpdaterFields}
+                    columns="2"
+                    mode="readonly"
+                >
+                </lightning-record-form>
+            </div>
+        </template>
+        <template lwc:if={hasNoRecordId}>
+            <c-error-panel
+                friendly-message="Select a Picklist Record to see details"
+            ></c-error-panel>
+        </template>
+        <template lwc:if={picklistUpdater.error}>
+            <c-error-panel
+                friendly-message="Error retrieving data"
+                errors={picklistUpdater.error}
+            ></c-error-panel>
+        </template>
+    </lightning-card>
+
+</template>

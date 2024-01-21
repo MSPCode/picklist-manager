@@ -79,6 +79,26 @@ export default class picklistUpdater extends LightningElement {
         }
     }
 
+
+    resetForm() {
+        this.actionName = '';
+        this.objectName = '';
+        this.primaryFieldName = '';
+        this.primaryValue = '';
+        this.secondaryFieldName = '';
+        this.secondaryValue = '';
+        // Reset any other tracked properties as needed
+    }
+
+    refreshComponent() {
+        // Refresh the component
+        // Method 1: Reload the entire page
+        location.reload();
+
+        // Method 2: Refresh only the component data
+        // You may need to emit an event or call a method to re-fetch data
+    }
+
     createPicklist(){
         const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName, 'Primary_Value__c': this.primaryValue, 'Secondary_Values__c': this.secondaryValue};
         const recordInput = {apiName : 'Picklist_Updater__c', fields};
@@ -122,7 +142,10 @@ export default class picklistUpdater extends LightningElement {
             fieldToUpdate[ID_FIELD.fieldApiName] = this.recordId;
             fieldToUpdate[STATUS_FIELD.fieldApiName] = this.statusMessage;
             const updateRecordInput = { fields: fieldToUpdate };
+            this.resetForm();
+            this.refreshComponent();
             return updateRecord(updateRecordInput);
+
         })
         .catch(error => {
             console.log('Error: ', error.body.message);

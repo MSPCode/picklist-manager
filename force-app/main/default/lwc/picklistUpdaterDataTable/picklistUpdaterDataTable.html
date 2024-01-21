@@ -1,0 +1,16 @@
+<template>
+    <template if:true={showTable}>
+        <lightning-card  title="Picklist Manager Records">
+            <c-data-table-utility records={allRecords} 
+            total-records={allRecords.length} 
+            columns = {columns}
+            key-field="Id"
+            show-search-box="true"            
+            max-row-selection={allRecords.length}
+            onpaginatorchange={handlePaginatorChange}
+            onsetselectedrecords={handleAllSelectedRows}>
+            </c-data-table-utility>     
+        </lightning-card>
+    </template>
+        
+</template>
