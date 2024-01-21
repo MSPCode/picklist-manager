@@ -125,7 +125,7 @@ public class PicklistFieldUpdater {
         try {
             results = service.updateMetadata(new MetadataService.Metadata[] { field });
     
-            // Check for and handle any errors in the response
+            //Check for and handle any errors in the response
             for (MetadataService.SaveResult result : results) {
                 if (!result.success) {
                     String errorMessage = 'Error updating field: ';
@@ -144,7 +144,7 @@ public class PicklistFieldUpdater {
             // Handle any exceptions during the update operation
             System.debug('Exception in updating field: ' + e.getMessage());
             // Re-throw the exception if you want it to be handled by the caller
-            throw e;
+            //throw e;
         }
         return results;
     }

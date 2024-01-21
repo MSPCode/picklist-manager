@@ -16,7 +16,7 @@ export default class picklistUpdater extends LightningElement {
     @track secondaryValue;
     @track recordId;
     @track objectNameGetter;
-    ;
+    @track statusMessage;
     @track getObjectName = false;
 
 
@@ -79,15 +79,13 @@ export default class picklistUpdater extends LightningElement {
         }
     }
 
-
-
     createPicklist(){
         const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName, 'Primary_Value__c': this.primaryValue, 'Secondary_Values__c': this.secondaryValue};
         const recordInput = {apiName : 'Picklist_Updater__c', fields};
 
         createRecord(recordInput).then(response => {
             console.log('Picklist Updater has been created : ', response.id);    
-            this.recordId = response.id; // Store the record ID     
+            this.recordId = response.id; // Store the record ID
 
             return updatePicklist({
                 objectName: this.objectName,
@@ -100,19 +98,35 @@ export default class picklistUpdater extends LightningElement {
             
         })
         .then(apexResponse => {
-            console.log('Response from mainPicklistHandler: ', apexResponse);
+
+            this.statusMessage = apexResponse.length === 0 ? 'Both Fields are updated successfully' : '';
+
+            console.log(`length of apexResponse: ${apexResponse.length}`);
+            
+            apexResponse.forEach(result =>{
+                if (result.errorMessage) {
+                    console.log(`Type of errorMessage: ${typeof result.errorMessage}`);
+                    console.log(`Length of errorMessage: ${result.errorMessage.length}`)
+
+                    console.log(result.errorMessage);
+                    this.statusMessage += `${result.errorMessage}\n`;
+                }
+
+            })
+
+            if (apexResponse.length === 1) {
+                this.statusMessage = 'Partial Operation May be Completed. ' + this.statusMessage;
+            }
         
             const fieldToUpdate = {}
             fieldToUpdate[ID_FIELD.fieldApiName] = this.recordId;
-            fieldToUpdate[STATUS_FIELD.fieldApiName] = 'SUCCESS!';
+            fieldToUpdate[STATUS_FIELD.fieldApiName] = this.statusMessage;
             const updateRecordInput = { fields: fieldToUpdate };
             return updateRecord(updateRecordInput);
         })
         .catch(error => {
             console.log('Error: ', error.body.message);
-            //let errorMessage = error.body && error.body.message ? error.body.message : 'Unknown error occurred';
-            // Update Status__c field with the error message
-            //const updateFields = { Id: recordId, Status__c: 'Error: ' + errorMessage };
+
             const fieldToUpdate = {}
             fieldToUpdate[ID_FIELD.fieldApiName] = this.recordId;
             fieldToUpdate[STATUS_FIELD.fieldApiName] = error.body.message;
@@ -121,9 +135,7 @@ export default class picklistUpdater extends LightningElement {
             return updateRecord(updateRecordInput);
         })
         .catch(error => {
-            console.error('Error creating record: ', error);
-            let errorMessage = error.body && error.body.message ? error.body.message : 'Unknown error occurred';
-            // Handle the error appropriately
+            console.error('Error creating record: ', error.body.message);
         });
     }
 }

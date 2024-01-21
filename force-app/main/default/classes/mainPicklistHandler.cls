@@ -1,35 +1,70 @@
 public with sharing class mainPicklistHandler {
 
     @AuraEnabled(cacheable=false)
-    public static MetadataService.SaveResult[] updatePicklist(String objectName, String primaryFieldName, String secondaryFieldName, List<String> primaryFieldValues, List<String> secondaryFieldValue) {
+    public static List<ResultWrapper> updatePicklist(String objectName, String primaryFieldName, String secondaryFieldName, List<String> primaryFieldValues, List<String> secondaryFieldValue) {
         
         PicklistFieldUpdater updater = new PicklistFieldUpdater(objectName);
-        List<MetadataService.SaveResult> combinedResults = new List<MetadataService.SaveResult>();
+        List<ResultWrapper> results = new List<ResultWrapper>();
+        List<MetadataService.SaveResult> primayFieldUpdate;
+        List<MetadataService.SaveResult> dependentFieldUpdate;
+        List<MetadataService.SaveResult> dependecyUpdate;
 
         try {
-            combinedResults.addAll(updater.updatePicklistField(primaryFieldName, primaryFieldValues));
+            primayFieldUpdate = updater.updatePicklistField(primaryFieldName, primaryFieldValues);
+            results.addAll(processSaveResults(primayFieldUpdate, primaryFieldName));
         }
         catch(System.NullPointerException e){
             System.debug('NullPointerException encountered in updatePicklist: ' + e.getMessage());
-            // Log the exception but do not throw, to continue execution
+            results.add(new ResultWrapper(primaryFieldName, e.getMessage()));
+        }
+        
+        try {
+            dependentFieldUpdate = updater.updatePicklistField(secondaryFieldName, secondaryFieldValue);
+            results.addAll(processSaveResults(dependentFieldUpdate, secondaryFieldName));
+        }
+        catch(System.NullPointerException e){
+            System.debug('NullPointerException encountered in dependent field update: ' + e.getMessage());
+            results.add(new ResultWrapper(secondaryFieldName, e.getMessage()));
         }
 
         try {
-
-            string primaryControllingValue = primaryFieldValues[0];
-
-            combinedResults.addAll(updater.updatePicklistField(secondaryFieldName, secondaryFieldValue));
-            // Assuming update.updateDependency returns a list of SaveResult
-            combinedResults.addAll(updater.updateDependency(secondaryFieldName, primaryFieldName, primaryControllingValue, secondaryFieldValue));
+            String primaryControllingValue = primaryFieldValues[0];
+            dependecyUpdate = updater.updateDependency(secondaryFieldName, primaryFieldName, primaryControllingValue, secondaryFieldValue);
+            results.addAll(processSaveResults(dependecyUpdate, secondaryFieldName + ' dependency'));
         }
         catch(System.NullPointerException e){
-            // Handle exception for secondary field updates
-            System.debug('NullPointerException encountered in secondary field updates: ' + e.getMessage());
-            // You may want to handle this exception differently
+            System.debug('NullPointerException encountered in dependency update: ' + e.getMessage());
+            results.add(new ResultWrapper(secondaryFieldName + ' dependency', e.getMessage()));
         }
 
-        // Directly assign the list to an array
-        MetadataService.SaveResult[] resultsArray = combinedResults;
-        return resultsArray;
+        return results;
+    }
+
+    private static List<ResultWrapper> processSaveResults(List<MetadataService.SaveResult> saveResults, String fieldName) {
+        
+        List<ResultWrapper> resultWrappers = new List<ResultWrapper>();
+        for (MetadataService.SaveResult result : saveResults) {
+            if (!result.success) {
+                String errorMessage = 'Error updating field: ' + fieldName + '; ';
+                if (result.errors != null) {
+                    for (MetadataService.Error error : result.errors) {
+                        errorMessage += error.message + '; ';
+                        System.debug('******************ERROR MESSAGE*************************: '+ errorMessage);
+                    }
+                }
+                resultWrappers.add(new ResultWrapper(fieldName, errorMessage));
+            }
+        }
+        return resultWrappers;
+    }
+
+    public class ResultWrapper {
+        @AuraEnabled public String fieldName {get; private set;}
+        @AuraEnabled public String errorMessage {get; private set;}
+
+        public ResultWrapper(String fieldName, String errorMessage) {
+            this.fieldName = fieldName;
+            this.errorMessage = errorMessage;
+        }
     }
 }
