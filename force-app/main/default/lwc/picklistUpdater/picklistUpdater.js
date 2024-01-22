@@ -100,7 +100,7 @@ export default class picklistUpdater extends LightningElement {
     }
 
     createPicklist(){
-        const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName, 'Primary_Value__c': this.primaryValue, 'Secondary_Values__c': this.secondaryValue};
+        const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName,'Primary_Field_Name__c':this.primaryFieldName, 'Primary_Value__c': this.primaryValue,'Dependent_Field_Name__c': this.secondaryFieldName, 'Secondary_Values__c': this.secondaryValue};
         const recordInput = {apiName : 'Picklist_Updater__c', fields};
 
         createRecord(recordInput).then(response => {
