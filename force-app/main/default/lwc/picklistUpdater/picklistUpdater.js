@@ -22,11 +22,10 @@ export default class picklistUpdater extends LightningElement {
 
     get options() {
         return [
-            { label: 'Add Primary', value: 'Add Primary', checked: false },
-            { label: 'Add Secondary', value: 'Add Secondary', checked: false },
-            { label: 'Add Primary & Secondary', value: 'Add Primary & Secondary', checked: false },
-            { label: 'Deactivate Primary', value: 'Deactivate Primary', checked: false },
-            { label: 'Deactivate Secondary', value: 'Deactivate Secondary', checked: false },
+            { label: 'Add Single Value', value: 'Add Single Value', checked: false },
+            { label: 'Add Primary & Dependent Field Values', value: 'Add Primary & Dependent Field Values', checked: false },
+            { label: 'Deactivate Value', value: 'Deactivate Value', checked: false },
+            { label: 'Update Dependency Only (existing values)', value: 'Update Dependency Only (existing values)', checked: false },
         ];
     }
 
@@ -61,7 +60,6 @@ export default class picklistUpdater extends LightningElement {
 
     handleSecondaryFieldName(event){
         this.secondaryFieldName = event.detail.mainField;
-        console.log(this.secondaryFieldName);
     }
 
     updaterPrimaryValue(event){
@@ -71,12 +69,34 @@ export default class picklistUpdater extends LightningElement {
     updaterSecondaryValue(event){
         this.secondaryValue = event.target.value;
     }
-
+    
     handleApexResponse(apexResponse) {
      
         for(let i =0; i <apexResponse.length; i++){
             console.log(apexResponse[i])
         }
+    }
+
+     //this function not working. Need work.
+    // stringTolist(inpt){
+       
+    //     if(inpt.includes(';')){
+    //         return this.secondaryValue = inpt.split(';');
+    //     } else {
+    //         return this.secondaryValue = [inpt];
+    //     }
+    // }
+
+    apexClassInput(){
+    return {
+        actionName: this.actionName,
+        objectName: this.objectName,
+        primaryField: this.primaryFieldName,
+        secondaryField: this.secondaryFieldName,
+        primaryValues: [this.primaryValue], // Convert primaryValue to a list
+        secondaryValues: [this.secondaryValue] // Convert SecondaryValue to a list
+        };
+
     }
 
 
@@ -108,16 +128,14 @@ export default class picklistUpdater extends LightningElement {
             this.recordId = response.id; // Store the record ID
 
             return updatePicklist({
-                objectName: this.objectName,
-                primaryFieldName: this.primaryFieldName,
-                secondaryFieldName: this.secondaryFieldName,
-                primaryFieldValues: this.primaryValue, // Convert primaryValue to a list
-                secondaryFieldValue: this.secondaryValue // Convert SecondaryValue to a list
+                input:this.apexClassInput()
 
+                
             });
             
         })
         .then(apexResponse => {
+
 
             this.statusMessage = apexResponse.length === 0 ? 'Both Fields are updated successfully' : '';
 

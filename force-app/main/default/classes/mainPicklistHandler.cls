@@ -1,43 +1,49 @@
 public with sharing class mainPicklistHandler {
 
     @AuraEnabled(cacheable=false)
-    public static List<ResultWrapper> updatePicklist(String objectName, String primaryFieldName, String secondaryFieldName, List<String> primaryFieldValues, List<String> secondaryFieldValue) {
+    public static List<ResultWrapper> updatePicklist(InputWrap input) {
         
-        PicklistFieldUpdater updater = new PicklistFieldUpdater(objectName);
+        PicklistFieldUpdater updater = new PicklistFieldUpdater(input.objectName);
         List<ResultWrapper> results = new List<ResultWrapper>();
-        List<MetadataService.SaveResult> primayFieldUpdate;
+        List<MetadataService.SaveResult> primaryFieldUpdate;
         List<MetadataService.SaveResult> dependentFieldUpdate;
-        List<MetadataService.SaveResult> dependecyUpdate;
-
-        try {
-            primayFieldUpdate = updater.updatePicklistField(primaryFieldName, primaryFieldValues);
-            results.addAll(processSaveResults(primayFieldUpdate, primaryFieldName));
-        }
-        catch(System.NullPointerException e){
-            System.debug('NullPointerException encountered in updatePicklist: ' + e.getMessage());
-            results.add(new ResultWrapper(primaryFieldName, e.getMessage()));
-        }
+        List<MetadataService.SaveResult> dependencyUpdate;
         
-        try {
-            dependentFieldUpdate = updater.updatePicklistField(secondaryFieldName, secondaryFieldValue);
-            results.addAll(processSaveResults(dependentFieldUpdate, secondaryFieldName));
-        }
-        catch(System.NullPointerException e){
-            System.debug('NullPointerException encountered in dependent field update: ' + e.getMessage());
-            results.add(new ResultWrapper(secondaryFieldName, e.getMessage()));
-        }
+                try {
+            if (input.actionName == 'Add Single Value' && input.primaryField != null && !input.primaryValues.isEmpty()) {
+                primaryFieldUpdate = updater.updatePicklistField(input.primaryField, input.primaryValues);
+                results.addAll(processSaveResults(primaryFieldUpdate, input.primaryField));
+                
+            } else if (input.actionName == 'Add Primary & Dependent Field Values' && input.primaryField != null && !input.primaryValues.isEmpty() && input.secondaryField != null && !input.secondaryValues.isEmpty()) {
+                primaryFieldUpdate = updater.updatePicklistField(input.primaryField, input.primaryValues);
+                results.addAll(processSaveResults(primaryFieldUpdate, input.primaryField));
 
-        try {
-            String primaryControllingValue = primaryFieldValues[0];
-            dependecyUpdate = updater.updateDependency(secondaryFieldName, primaryFieldName, primaryControllingValue, secondaryFieldValue);
-            results.addAll(processSaveResults(dependecyUpdate, secondaryFieldName + ' dependency'));
+                dependentFieldUpdate = updater.updatePicklistField(input.secondaryField, input.secondaryValues);
+                results.addAll(processSaveResults(dependentFieldUpdate, input.secondaryField));
+
+                String primaryControllingValue = input.primaryValues[0];
+                dependencyUpdate = updater.updateDependency(input.secondaryField, input.primaryField, primaryControllingValue, input.secondaryValues);
+                results.addAll(processSaveResults(dependencyUpdate, input.secondaryField + ' dependency'));
+                
+            } else if (input.actionName == 'Update Dependency Only (existing values)' && input.primaryField != null && !input.primaryValues.isEmpty() && input.secondaryField != null && !input.secondaryValues.isEmpty()) {
+                String primaryControllingValue = input.primaryValues[0];
+                dependencyUpdate = updater.updateDependency(input.secondaryField, input.primaryField, primaryControllingValue, input.secondaryValues);
+                results.addAll(processSaveResults(dependencyUpdate, input.secondaryField + ' dependency'));
+            }
+
+            // Placeholder for 'Deactivate Value' logic
+            if (input.actionName == 'Deactivate Value') {
+                // Implementation will be added later
+            }
         }
         catch(System.NullPointerException e){
-            System.debug('NullPointerException encountered in dependency update: ' + e.getMessage());
-            results.add(new ResultWrapper(secondaryFieldName + ' dependency', e.getMessage()));
+            System.debug('NullPointerException encountered: ' + e.getMessage());
+            results.add(new ResultWrapper(input.primaryField, e.getMessage())); // This might need refinement based on where the exception is thrown
         }
 
         return results;
+
+
     }
 
     private static List<ResultWrapper> processSaveResults(List<MetadataService.SaveResult> saveResults, String fieldName) {
@@ -66,5 +72,16 @@ public with sharing class mainPicklistHandler {
             this.fieldName = fieldName;
             this.errorMessage = errorMessage;
         }
+
+    
     }
+    public class InputWrap {
+        @AuraEnabled public String actionName { get; set; }
+        @AuraEnabled public String objectName { get; set; }
+        @AuraEnabled public String primaryField { get; set; }
+        @AuraEnabled public List<String> primaryValues { get; set; }
+        @AuraEnabled public String secondaryField { get; set; }
+        @AuraEnabled public List<String> secondaryValues { get; set; }
+    }
+    
 }
