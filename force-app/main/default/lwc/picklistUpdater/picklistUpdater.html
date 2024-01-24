@@ -6,10 +6,10 @@
                 <!-- Action and Object Name on the same line -->
                 <lightning-layout-item padding="around-small" size="12">
                     <lightning-layout-item padding="around-small" size="6">
-                        <lightning-combobox id="actionMenu" label="Select Action" name="action" value={value} placeholder="Select Action" options={options} onchange={updaterActionName}></lightning-combobox>
+                        <lightning-combobox id="actionMenu" label="Select Action" name="action" value={value} placeholder="Select Action" options={options} onchange={updaterActionName} required></lightning-combobox>
                     </lightning-layout-item>
                     <lightning-layout-item padding="around-small" size="6">
-                        <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="EntityDefinition"
+                        <c-reusable-lookup label="Object Name" selected-icon-name="standard:account" object-label="EntityDefinition" help-text="Select Object API Name" required
                             object-api-name="EntityDefinition" field-api-name="QualifiedApiName" other-field-api-name="Label" additional-where-clause = "IsCustomizable=true"
                             onvalueselected={handleObjectName}>
                         </c-reusable-lookup>
@@ -18,37 +18,36 @@
 
                 <!-- Primary Field & Primary Value on the same line -->
                 <template if:true={objectNameGetter}>
-                    <lightning-layout-item padding="around-small" size="12">
-                        <lightning-layout>
-                            <lightning-layout-item padding="around-small" size="6">
-                                <c-reusable-lookup label="Primary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
-                                    object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
-                                    onvalueselected={handlePrimaryFieldName}>
-                                </c-reusable-lookup>
-                            </lightning-layout-item>
-                            <lightning-layout-item padding="around-small" size="6">
-                                <lightning-input name="Primary Value" type="text" label="Primary Value" onchange={updaterPrimaryValue} ></lightning-input>
-                            </lightning-layout-item>
-                        </lightning-layout>
-                    </lightning-layout-item>
-                </template>
-
+                        <lightning-layout-item padding="around-small" size="12">
+                            <lightning-layout>
+                                <lightning-layout-item padding="around-small" size="6">
+                                    <c-reusable-lookup label="Primary Field" selected-icon-name="standard:account" object-label="FieldDefinition" help-text="Select Field You Need to Update. Select Primary Field Here if You're Updating Dependent Field."
+                                        object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
+                                        onvalueselected={handlePrimaryFieldName}>
+                                    </c-reusable-lookup>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="6">
+                                    <lightning-input name="Primary Value" type="text" label="Primary Value" field-level-help="Select Only One Value if Adding Dependent Values in same run. Seperate Values By ; Symbol to Add Multiple Values " onchange={updaterPrimaryValue} ></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
 
                 <!-- Secondary Field & Secondary Value on the same line -->
-                <template if:true={objectNameGetter}>
-                    <lightning-layout-item padding="around-small" size="12">
-                        <lightning-layout>
-                            <lightning-layout-item padding="around-small" size="6">
-                                <c-reusable-lookup label="Secondary Field" selected-icon-name="standard:account" object-label="FieldDefinition"
-                                    object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
-                                    onvalueselected={handleSecondaryFieldName}>
-                                </c-reusable-lookup>
-                            </lightning-layout-item>
-                            <lightning-layout-item padding="around-small" size="6">
-                                <lightning-input name="Secondary Value" type="text" label="Secondary Value" onchange={updaterSecondaryValue} ></lightning-input>
-                            </lightning-layout-item>
-                        </lightning-layout>
-                    </lightning-layout-item>
+                    <template if:true={showSecondaryFields}>
+                        <lightning-layout-item padding="around-small" size="12">
+                            <lightning-layout>
+                                <lightning-layout-item padding="around-small" size="6">
+                                    <c-reusable-lookup label="Secondary Field" selected-icon-name="standard:account" object-label="FieldDefinition" help-text="Select Dependent Field API Name"
+                                        object-api-name="FieldDefinition" field-api-name="QualifiedApiName" other-field-api-name="BusinessStatus" parent-field-api-name="EntityDefinition.QualifiedApiName" parent-record-id={objectNameGetter} additional-where-clause = "DATATYPE='Picklist'"
+                                        onvalueselected={handleSecondaryFieldName}>
+                                    </c-reusable-lookup>
+                                </lightning-layout-item>
+                                <lightning-layout-item padding="around-small" size="6">
+                                    <lightning-input name="Secondary Value" type="text" label="Secondary Value" field-level-help="Seperate Values By ; Symbol to Add Multiple Values" onchange={updaterSecondaryValue} ></lightning-input>
+                                </lightning-layout-item>
+                            </lightning-layout>
+                        </lightning-layout-item>
+                    </template>
                 </template>
 
 

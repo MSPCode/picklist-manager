@@ -8,12 +8,12 @@ import STATUS_FIELD from '@salesforce/schema/Picklist_Updater__c.Status__c'
 
 export default class picklistUpdater extends LightningElement {
     @track selectedValue;
-    @track actionName;
-    @track objectName;
-    @track primaryFieldName;
-    @track primaryValue;
-    @track secondaryFieldName
-    @track secondaryValue;
+    @track actionName = '';
+    @track objectName = '';
+    @track primaryFieldName = '';
+    @track primaryValue = '';
+    @track secondaryFieldName = '';
+    @track secondaryValue='';
     @track recordId;
     @track objectNameGetter;
     @track statusMessage;
@@ -41,6 +41,11 @@ export default class picklistUpdater extends LightningElement {
             checked: option.value === this.selectedValue
         }));
     }
+
+    get showSecondaryFields() {
+        // Adjust these conditions as per your requirement
+        return ['Add Primary & Dependent Field Values', 'Update Dependency Only (existing values)'].includes(this.actionName);
+    }
     
     updaterActionName(event){
         this.actionName = event.target.value;
@@ -49,13 +54,11 @@ export default class picklistUpdater extends LightningElement {
     handleObjectName(event){
         this.objectName = event.detail.mainField;
         this.objectNameGetter = event.detail.mainField;
-        console.log(this.objectName);
         
     }
 
     handlePrimaryFieldName(event){
         this.primaryFieldName = event.detail.mainField;
-        console.log(this.primaryFieldName);
     }
 
     handleSecondaryFieldName(event){
@@ -78,14 +81,14 @@ export default class picklistUpdater extends LightningElement {
     }
 
      //this function not working. Need work.
-    // stringTolist(inpt){
+    stringTolist(inpt){
        
-    //     if(inpt.includes(';')){
-    //         return this.secondaryValue = inpt.split(';');
-    //     } else {
-    //         return this.secondaryValue = [inpt];
-    //     }
-    // }
+        if(inpt.includes(';')){
+            return inpt.split(';');
+        } else {
+            return [inpt];
+        }
+    }
 
     apexClassInput(){
     return {
@@ -93,8 +96,8 @@ export default class picklistUpdater extends LightningElement {
         objectName: this.objectName,
         primaryField: this.primaryFieldName,
         secondaryField: this.secondaryFieldName,
-        primaryValues: [this.primaryValue], // Convert primaryValue to a list
-        secondaryValues: [this.secondaryValue] // Convert SecondaryValue to a list
+        primaryValues: this.stringTolist(this.primaryValue), // Convert primaryValue to a list
+        secondaryValues: this.stringTolist(this.secondaryValue) // Convert SecondaryValue to a list
         };
 
     }
@@ -120,6 +123,7 @@ export default class picklistUpdater extends LightningElement {
     }
 
     createPicklist(){
+        
         const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName,'Primary_Field_Name__c':this.primaryFieldName, 'Primary_Value__c': this.primaryValue,'Dependent_Field_Name__c': this.secondaryFieldName, 'Secondary_Values__c': this.secondaryValue};
         const recordInput = {apiName : 'Picklist_Updater__c', fields};
 
