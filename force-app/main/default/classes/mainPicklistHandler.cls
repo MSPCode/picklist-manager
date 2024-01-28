@@ -33,7 +33,8 @@ public with sharing class mainPicklistHandler {
 
             // Placeholder for 'Deactivate Value' logic
             if (input.actionName == 'Deactivate Value') {
-                // Implementation will be added later
+                primaryFieldUpdate = updater.deactivatePicklistValues(input.primaryField, input.primaryValues);
+                results.addAll(processSaveResults(primaryFieldUpdate, input.primaryField));
             }
         }
         catch(System.NullPointerException e){
