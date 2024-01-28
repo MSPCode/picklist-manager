@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Salesforce DX Project: Next Steps
 
 Add picklist using metadata API (using Apex MDAPI).
