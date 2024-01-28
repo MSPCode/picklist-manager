@@ -21,6 +21,7 @@ export default class ReusableLookup extends LightningElement {
     @api parentFieldApiName;
     @api additionalWhereClause
 
+
     preventClosingOfSerachPanel = false;
 
     get methodInput() {
@@ -35,6 +36,7 @@ export default class ReusableLookup extends LightningElement {
             additionalWhereClause: this.additionalWhereClause
         };
     }
+    
 
     get showRecentRecords() {
         if (!this.recordsList) {
@@ -111,6 +113,18 @@ export default class ReusableLookup extends LightningElement {
         //dispatching the custom event
         this.dispatchEvent(selectedEvent);
     }
+
+    @api
+    setErrorState(isError) {
+        if(isError) {
+            this.template.querySelector('.lookup-container').classList.add('error');
+        } else {
+            this.template.querySelector('.lookup-container').classList.remove('error');
+        }
+    }
+    
+    
+
     
     //to close the search panel when clicked outside of search input
     handleInputBlur(event) {

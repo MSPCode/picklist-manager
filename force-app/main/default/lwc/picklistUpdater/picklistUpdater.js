@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { createRecord } from "lightning/uiRecordApi";
 import updatePicklist from '@salesforce/apex/mainPicklistHandler.updatePicklist';
 import { updateRecord } from 'lightning/uiRecordApi';
@@ -102,6 +103,111 @@ export default class picklistUpdater extends LightningElement {
 
     }
 
+    resetErrorStates() {
+
+        // Reset standard combobox fields
+        this.template.querySelectorAll('lightning-combobox.error').forEach(el => {
+            el.classList.remove('error');
+        });
+    
+                
+        // Reset standard input fields
+        this.template.querySelectorAll('lightning-input.error').forEach(el => {
+            el.classList.remove('error');
+        });
+    
+        // Reset c-reusable-lookup components
+        this.template.querySelectorAll('c-reusable-lookup').forEach(lookup => {
+            lookup.setErrorState(false); // Assuming setErrorState is a method in c-reusable-lookup
+        });
+    }
+    
+
+    validateFields() {
+        let isValid = true;
+        const action = this.actionName;
+
+        // Resetting previous error states
+        this.resetErrorStates();
+
+        // Function to mark standard combobox fields as invalid
+        const markActionInvalid = () => {
+            const actionField = this.template.querySelector(`lightning-combobox[data-id="actionMenu"]`);
+            if(actionField) {
+                actionField.classList.add('error');
+            }
+            isValid = false;
+        };
+    
+        // Function to mark reusable lookup fields as invalid
+        const markLookupFieldInvalid = (fieldName) => {
+            const field = this.template.querySelector(`c-reusable-lookup[data-id="${fieldName}"]`);
+            if(field) {
+                field.setErrorState(true);
+            }
+            isValid = false;
+        };
+
+        // Function to mark standard input fields as invalid
+        const markInputFieldInvalid = (fieldName) => {
+            const field = this.template.querySelector(`lightning-input[data-id="${fieldName}"]`);
+            if(field) {
+                field.classList.add('error');
+            }
+            isValid = false;
+
+        }
+
+        if (!this.actionName) {
+            markActionInvalid(); // Mark the action combobox as invalid if it's empty
+        }
+    
+        // Validate based on action
+        switch(action) {
+            case 'Add Single Value':
+                if (!this.objectName) markLookupFieldInvalid('objectName');
+                if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
+                if (!this.primaryValue) markInputFieldInvalid('primaryValue');
+                break;
+            case 'Add Primary & Dependent Field Values':
+                if (!this.objectName) markLookupFieldInvalid('objectName');
+                if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
+                if (!this.primaryValue) markInputFieldInvalid('primaryValue');
+                if (!this.secondaryFieldName) markLookupFieldInvalid('secondaryField');
+                if (!this.secondaryValue) markInputFieldInvalid('secondaryValue');
+                break;
+            case 'Deactivate Value':
+                if (!this.objectName) markLookupFieldInvalid('objectName');
+                if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
+                if (!this.primaryValue) markInputFieldInvalid('primaryValue');
+                break;
+
+            case 'Update Dependency Only (existing values)':
+                if (!this.objectName) markLookupFieldInvalid('objectName');
+                if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
+                if (!this.primaryValue) markInputFieldInvalid('primaryValue');
+                if (!this.secondaryFieldName) markLookupFieldInvalid('secondaryField');
+                if (!this.secondaryValue) markInputFieldInvalid('secondaryValue');
+                break;
+        }
+    
+        return isValid;
+    }
+    
+
+    
+
+    // Method to show a toast message
+    showToast(title, message, variant) {
+        const evt = new ShowToastEvent({
+            title: title,
+            message: message,
+            variant: variant,
+        });
+        this.dispatchEvent(evt);
+    }
+    
+
 
     resetForm() {
         this.actionName = '';
@@ -123,6 +229,11 @@ export default class picklistUpdater extends LightningElement {
     }
 
     createPicklist(){
+
+        if (!this.validateFields()) {
+            this.showToast('Error', 'Please fill out required fields', 'error');
+            return
+        }
         
         const fields = {'Action__c' : this.actionName, 'Object_Name__c' : this.objectName,'Primary_Field_Name__c':this.primaryFieldName, 'Primary_Value__c': this.primaryValue,'Dependent_Field_Name__c': this.secondaryFieldName, 'Secondary_Values__c': this.secondaryValue};
         const recordInput = {apiName : 'Picklist_Updater__c', fields};
