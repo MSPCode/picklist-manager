@@ -72,12 +72,28 @@ export default class PicklistUpdaterDataTable extends LightningElement {
         data
     }) {
         if (data) {
+
+            const sortByName = (a, b) => {
+                let nameA = a.Name ? a.Name.toUpperCase() : ''; // to handle null/undefined
+                let nameB = b.Name ? b.Name.toUpperCase() : ''; // to handle null/undefined
+    
+                if (nameA < nameB) {
+                    return this.sortDirection === 'dsc' ? -1 : 1;
+                } else if (nameA > nameB) {
+                    return this.sortDirection === 'dsc' ? 1 : -1;
+                }
+                return 0;
+            };
+
+            // Sort the data
+            let sortedData = [...data].sort(sortByName);
+
             let records = [];
-            for(let i=0; i<data.length; i++){
+            for(let i=0; i<sortedData.length; i++){
                 let record = {};
                 record.rowNumber = ''+(i+1);
-                record.nameUrl = '/'+data[i].Id;                
-                record = Object.assign(record, data[i]);               
+                record.nameUrl = '/'+sortedData[i].Id;                
+                record = Object.assign(record, sortedData[i]);               
                 records.push(record);
             }
 
