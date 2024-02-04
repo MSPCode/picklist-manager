@@ -106,14 +106,16 @@ export default class picklistUpdater extends LightningElement {
     resetErrorStates() {
 
         // Reset standard combobox fields
-        this.template.querySelectorAll('lightning-combobox.error').forEach(el => {
-            el.classList.remove('error');
+        this.template.querySelectorAll('lightning-combobox').forEach(el => {
+            el.setCustomValidity(""); // Clear any custom validity/error messages
+            el.reportValidity(); // Clear the visual indication of the error
         });
     
                 
         // Reset standard input fields
-        this.template.querySelectorAll('lightning-input.error').forEach(el => {
-            el.classList.remove('error');
+        this.template.querySelectorAll('lightning-input').forEach(el => {
+            el.setCustomValidity(""); // Clear any custom validity/error messages
+            el.reportValidity(); // Clear the visual indication of the erro
         });
     
         // Reset c-reusable-lookup components
@@ -134,12 +136,14 @@ export default class picklistUpdater extends LightningElement {
         const markActionInvalid = () => {
             const actionField = this.template.querySelector(`lightning-combobox[data-id="actionMenu"]`);
             if(actionField) {
-                actionField.classList.add('error');
+                //actionField.classList.add('error');
+                actionField.setCustomValidity("This is Required Field");
+                actionField.reportValidity(); // Show the error message
             }
             isValid = false;
         };
     
-        // Function to mark reusable lookup fields as invalid
+        //Function to mark reusable lookup fields as invalid
         const markLookupFieldInvalid = (fieldName) => {
             const field = this.template.querySelector(`c-reusable-lookup[data-id="${fieldName}"]`);
             if(field) {
@@ -148,11 +152,13 @@ export default class picklistUpdater extends LightningElement {
             isValid = false;
         };
 
+
         // Function to mark standard input fields as invalid
         const markInputFieldInvalid = (fieldName) => {
             const field = this.template.querySelector(`lightning-input[data-id="${fieldName}"]`);
             if(field) {
-                field.classList.add('error');
+                field.setCustomValidity("This is Required Field");
+                field.reportValidity(); // Show the error message
             }
             isValid = false;
 
@@ -169,6 +175,7 @@ export default class picklistUpdater extends LightningElement {
                 if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
                 if (!this.primaryValue) markInputFieldInvalid('primaryValue');
                 break;
+                
             case 'Add Primary & Dependent Field Values':
                 if (!this.objectName) markLookupFieldInvalid('objectName');
                 if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');
@@ -176,6 +183,7 @@ export default class picklistUpdater extends LightningElement {
                 if (!this.secondaryFieldName) markLookupFieldInvalid('secondaryField');
                 if (!this.secondaryValue) markInputFieldInvalid('secondaryValue');
                 break;
+
             case 'Deactivate Value':
                 if (!this.objectName) markLookupFieldInvalid('objectName');
                 if (!this.primaryFieldName) markLookupFieldInvalid('primaryField');

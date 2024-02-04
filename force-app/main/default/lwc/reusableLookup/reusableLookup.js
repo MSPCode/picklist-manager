@@ -116,14 +116,19 @@ export default class ReusableLookup extends LightningElement {
 
     @api
     setErrorState(isError) {
-        if(isError) {
-            this.template.querySelector('.lookup-container').classList.add('error');
-        } else {
-            this.template.querySelector('.lookup-container').classList.remove('error');
-        }
+        // Wait for the next microtask to ensure the DOM has been updated
+        Promise.resolve().then(() => {
+            let lookupField = this.template.querySelector('.lookup-container lightning-input');
+            if (lookupField) {
+                if (isError) {
+                    lookupField.setCustomValidity("This is Required Field");
+                } else {
+                    lookupField.setCustomValidity(""); // Clear the error message
+                }
+                lookupField.reportValidity(); // Show or hide the error message
+            }
+        });
     }
-    
-    
 
     
     //to close the search panel when clicked outside of search input

@@ -13,10 +13,3 @@ div input[readonly] {
     height: 1.5rem;
     line-height: 2;
 }
-
-.error {
-    border: 2px solid red;
-    border-radius: 10px; /* Adds a little curve to the border */
-    /*height: 50%; /* Sets the height to 50% of the parent element */
-    box-sizing: border-box; /* Ensures that the border is included in the height calculation */
-}
