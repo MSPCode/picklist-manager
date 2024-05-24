@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>join_Picklist__c</fullName>
+    <externalId>false</externalId>
+    <label>join Picklist</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>12312321312</fullName>
+                <default>false</default>
+                <label>12312321312</label>
+            </value>
+            <value>
+                <fullName>BOb</fullName>
+                <default>false</default>
+                <label>BOb</label>
+            </value>
+            <value>
+                <fullName>JOHN</fullName>
+                <default>false</default>
+                <label>JOHN</label>
+            </value>
+            <value>
+                <fullName>JOINT</fullName>
+                <default>false</default>
+                <label>JOINT</label>
+            </value>
+            <value>
+                <fullName>NEWDAY</fullName>
+                <default>false</default>
+                <label>NEWDAY</label>
+            </value>
+            <value>
+                <fullName>NEWDAY100</fullName>
+                <default>false</default>
+                <label>NEWDAY100</label>
+            </value>
+            <value>
+                <fullName>PRODUCT400</fullName>
+                <default>false</default>
+                <label>PRODUCT400</label>
+            </value>
+            <value>
+                <fullName>PRODUCT 400</fullName>
+                <default>false</default>
+                <label>PRODUCT 400</label>
+            </value>
+            <value>
+                <fullName>PRODUCT401</fullName>
+                <default>false</default>
+                <label>PRODUCT401</label>
+            </value>
+            <value>
+                <fullName>PRODUCT402</fullName>
+                <default>false</default>
+                <label>PRODUCT402</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

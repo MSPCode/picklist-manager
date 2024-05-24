@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Secondary_Picklist__c</fullName>
+    <externalId>false</externalId>
+    <label>Dependent Picklist</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <controllingField>Primary_Picklist__c</controllingField>
+        <valueSetDefinition>
+            <sorted>true</sorted>
+            <value>
+                <fullName>P100</fullName>
+                <default>false</default>
+                <label>P100</label>
+            </value>
+            <value>
+                <fullName>PROD 22</fullName>
+                <default>false</default>
+                <label>PROD 22</label>
+            </value>
+            <value>
+                <fullName>PROD61</fullName>
+                <default>false</default>
+                <label>PROD61</label>
+            </value>
+            <value>
+                <fullName>PROD62</fullName>
+                <default>false</default>
+                <label>PROD62</label>
+            </value>
+            <value>
+                <fullName>PROD63</fullName>
+                <default>false</default>
+                <label>PROD63</label>
+            </value>
+            <value>
+                <fullName>PROD64</fullName>
+                <default>false</default>
+                <label>PROD64</label>
+            </value>
+        </valueSetDefinition>
+        <valueSettings>
+            <controllingFieldValue>PROD 2</controllingFieldValue>
+            <valueName>PROD 22</valueName>
+        </valueSettings>
+        <valueSettings>
+            <controllingFieldValue>Product 7</controllingFieldValue>
+            <valueName>P100</valueName>
+        </valueSettings>
+    </valueSet>
+</CustomField>
