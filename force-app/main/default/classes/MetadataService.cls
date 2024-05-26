@@ -13201,7 +13201,7 @@ public class MetadataService {
     }
     public class MetadataPort {
         //public String endpoint_x = URL.getOrgDomainUrl().toExternalForm() + '/services/Soap/m/42.0';
-        public String endpoint_x = 'callout:ApexMDAPI/services/Soap/m/38.0';
+        public String endpoint_x = 'callout:PicklistUpdater/services/Soap/m/38.0';
         public Map<String,String> inputHttpHeaders_x;
         public Map<String,String> outputHttpHeaders_x;
         public String clientCertName_x;

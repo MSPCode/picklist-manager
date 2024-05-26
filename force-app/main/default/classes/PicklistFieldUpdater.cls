@@ -14,7 +14,7 @@ public class PicklistFieldUpdater {
         //unnecessary code but needed for session token referesh
         Http h = new Http();
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('callout:ApexMDAPI/services/data/v22.0/query/?q=SELECT+id+from+contact+LIMIT+1');
+        req.setEndpoint('callout:PicklistUpdater/services/data/v22.0/query/?q=SELECT+id+from+contact+LIMIT+1');
         req.setMethod('GET');
         HttpResponse res = h.send(req);
 

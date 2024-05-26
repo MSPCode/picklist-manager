@@ -260,7 +260,7 @@ export default class picklistUpdater extends LightningElement {
         .then(apexResponse => {
 
 
-            this.statusMessage = apexResponse.length === 0 ? 'Both Fields are updated successfully' : '';
+            this.statusMessage = apexResponse.length === 0 ? 'Fields are updated successfully' : '';
 
             console.log(`length of apexResponse: ${apexResponse.length}`);
             
