@@ -66,7 +66,7 @@ Open the **Picklist Manager** tab and select an action:
   ![Single Value Update](images/update_value.png)
 
 - **Add Primary & Dependent Field Values**: Add a primary (parent) value and secondary (child) values separated by semicolons (value1; value2; etc.). <br>
-  ![primary (parent) and dependent (secondary) values Update](images/secondary values.png)
+  ![primary (parent) and dependent (secondary) values Update](images/secondary_values.png)
 
 - **Deactivate Value**: Deactivate a value from an existing custom picklist field.
 - **Update Dependency Only**: Create dependencies between existing primary and secondary values.
