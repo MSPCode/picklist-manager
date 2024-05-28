@@ -10,10 +10,14 @@ The Picklist Manager App is a versatile Salesforce application designed to facil
 
 ### Deployment
 1. **Deploy code** to your Salesforce instance.
-2. **Add the Picklist Manager tab** to your Salesforce application.
-3. **Provide necessary access** at the profile level for the Picklist Manager.
-4. **Grant access** to the Picklist Updater object and field for necessary profiles.
-5. **Setup connected applications**:
+   <a href="https://githubsfdeploy.herokuapp.com/?owner=MSPCode&repo=picklist-manager">
+  <img alt="Deploy to Salesforce"
+       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
+ </a>
+3. **Add the Picklist Manager tab** to your Salesforce application.
+4. **Provide necessary access** at the profile level for the Picklist Manager.
+5. **Grant access** to the Picklist Updater object and field for necessary profiles.
+6. **Setup connected applications**:
     - **Create a connected app**, Auth Provider, and Named Credential as described below. Ensure the Named Credential is named 'PicklistUpdater'. If using a different name, update it accordingly in necessary files.
 
     1. **App Manager**:
@@ -67,8 +71,6 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## References
 This project uses components or code from the following repositories:
+- [Apex-mdapi](https://github.com/certinia/apex-mdapi)
 - [Salesforce Lightning Design System (SLDS)](https://github.com/salesforce-ux/design-system)
-- [Apex Recipes by Salesforce](https://github.com/trailheadapps/apex-recipes)
-
-Deploy this app to enhance picklist management in your Salesforce environment.
 
