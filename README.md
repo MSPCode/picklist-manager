@@ -9,11 +9,11 @@ The Picklist Manager App is a versatile Salesforce application designed to facil
 ## Setup
 
 ### Deployment
-1. **Deploy code** to your Salesforce instance.
-   <a href="https://githubsfdeploy.herokuapp.com/?owner=MSPCode&repo=picklist-manager">
-  <img alt="Deploy to Salesforce"
-       src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
- </a>
+1. **Deploy code** to your Salesforce instance. <br>
+      <a href="https://githubsfdeploy.herokuapp.com/?owner=MSPCode&repo=picklist-manager">
+     <img alt="Deploy to Salesforce"
+          src="https://raw.githubusercontent.com/afawcett/githubsfdeploy/master/src/main/webapp/resources/img/deploy.png">
+    </a>
 3. **Add the Picklist Manager tab** to your Salesforce application.
 4. **Provide necessary access** at the profile level for the Picklist Manager.
 5. **Grant access** to the Picklist Updater object and field for necessary profiles.
