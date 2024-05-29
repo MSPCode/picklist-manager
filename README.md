@@ -18,7 +18,7 @@ Currently, Salesforce does not allow non-admin users to add or remove picklist v
    </a>
 2. **Add the Picklist Manager tab to your Salesforce application.**
 3. **Provide necessary access at the profile level for the Picklist Manager.**
-4. **Grant access to the Picklist Updater object and field for necessary profiles.** (_this object stores requests made in Picklist Manager_)
+4. **Grant access to the Picklist Updater object and fields for necessary profiles.** (_this object stores requests made in Picklist Manager_)
 5. **Setup connected applications**:
    - **Create a connected app, Auth Provider, and Named Credential** as described below. (_Use 'PicklistUpdater' as the name for Named Credentials. If using a different name, add a new name in PicklistFieldUPdater.cls and MetadataService.cls._)
 
@@ -27,7 +27,8 @@ Currently, Salesforce does not allow non-admin users to add or remove picklist v
       - Go to Setup > App Manager > New Connected App.
       - Name: PicklistUpdater
       - Contact Email: [Your Preferred Email]
-      - Callback URL: _Update later after setting up Auth Provider._
+      - Enable OAuth Settings: Checked
+      - Callback URL: _Update later after setting up Auth Provider._ (_add http://localhost as placeholder_)
       - Selected Scope: Full access (full), Perform requests anytime (refresh_token, offline_access)
       - Security Settings: Check all required options including PKCE and secret requirements. (_see below image for reference_)
       - Save the app and click on the Manage Consumer Details.
@@ -58,9 +59,9 @@ Currently, Salesforce does not allow non-admin users to add or remove picklist v
       - Authentication Protocol: OAuth 2.0
       - Authentication Provider: PicklistUpdater
       - Scope: full refresh_token offline_access
-      - Start Authentication on save: Checked
+      - Start Authentication on Save: Checked
       - Generate Authorization Header: Checked
-      - Allow Merge Fields in HTTP Body: Checked
+      - Allow Merge Fields in HTTP Body: Checked (_if you receive erro, try again after a few minutes for connected app & auth provider to register_)
         ![Named Credentials](images/named_credentials.png)
         <br>
       - **Complete the authentication** by logging in with an admin-level user. 
