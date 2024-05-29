@@ -70,21 +70,21 @@ Currently, Salesforce does not allow non-admin users to add or remove picklist v
 
 Open the **Picklist Manager** tab and select an action:
 
-- **Add Single Value**: Add a value to an existing custom picklist field. <br>
+- **Add Single Value**: Add a new value to an existing custom picklist field. <br>
   ![Single Value Update](images/update_value.png)
 
-- **Add Primary & Dependent Field Values**: Add a primary (parent) value and secondary (child) values separated by semicolons (value1; value2; etc.). <br>
+- **Add Primary & Dependent Field Values**: Add a new value primary (parent) and secondary (dependent) picklists at the same time. Multiple secondary (dependent) values can be added. Each value is separated by semicolons (value1; value2; etc.). <br>
   ![primary (parent) and dependent (secondary) values Update](images/secondary_values.png)
 
-- **Deactivate Value**: Deactivate a value from an existing custom picklist field.
+- **Deactivate Value**: Deactivate a value from a custom picklist field.
  ![deactivate value](images/deactivate_value.png)
 
-- **Update Dependency Only**: Create dependencies between existing primary and secondary values.
+- **Update Dependency Only**: Create dependencies between existing primary (parent) and secondary (dependent) picklists.
 ![update depedency for existing values](images/dependent_picklist_update.png)
 
 ## Records Management
 
-- The app includes a **Picklist Manager Records** table to store and display all modifications to picklist values.
+- The app also includes a **Picklist Manager Records** table to store and display all modifications to picklist values. Records are stored in Picklist Updater object. You can adjust OWS and FLS per your requirements.
 ![picklist manager records](images/picklist_manager_records.png)
 
 ## Technology Used
